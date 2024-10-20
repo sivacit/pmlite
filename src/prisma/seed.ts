@@ -4,8 +4,8 @@ import { parseArgs } from 'node:util';
 import type { parseDsnOrThrow } from '@httpx/dsn-parser';
 import { parseDsn as parse } from '@httpx/dsn-parser';
 import { PrismaClient } from './';
-import { ProjectSeeds } from '../seeds/e2e/project-seeds';  
-import { UserSeeds } from '../seeds/e2e/user-seeds';
+import { ProjectSeeds } from '../seeds/e2e/projects-seeds';  
+import { UserSeeds } from '../seeds/e2e/users-seeds';
 
 export type IDsn = ReturnType<typeof parseDsnOrThrow>;
 
