@@ -5,7 +5,7 @@ import { UpdateProjectDto } from './dto/update-project.dto';
 import { AddTaskDto } from './dto/ add-task.dto';
 import { Task } from './entities/task.entity';
 import * as Papa from 'papaparse';
-import { generateTaskId } from 'src/utils/id-generator';
+import { generateTaskId } from '../utils/id-generator';
 import { Role } from './dto/collaborator.dto';
 import { CreateCollaboratorDto } from './dto/collaborator.dto';
 
