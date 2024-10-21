@@ -144,4 +144,24 @@ export class ProjectsService {
       });
     }
   }  
+
+  // Find task by id within a project
+  async findTaskInProject(projectId: string, taskId: string) {
+    return this.prisma.task.findFirst({
+      where: { id: taskId, projectId },
+    });
+  }
+
+  // Find user by id
+  async findUserById(userId: string) {
+    return this.prisma.user.findUnique({ where: { id: userId } });
+  }
+
+   // Assign a user to a task
+   async assignTaskToUser(taskId: string, userId: string) {
+    return this.prisma.task.update({
+      where: { id: taskId },
+      data: { userId },
+    });
+  }
 }
