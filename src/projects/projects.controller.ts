@@ -15,6 +15,8 @@ import { ProjectsService } from './projects.service';
 import { UsersService } from 'src/users/users.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
+import { CreateCollaboratorDto } from './dto/collaborator.dto';
+
 import { AddTaskDto } from './dto/ add-task.dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guard/jwt-auth.guard';
@@ -135,4 +137,15 @@ export class ProjectsController {
     // Step 5: Return the updated task
     return updatedTask;
   }
+
+  @Post(':projectId/colloborators/:userId')
+  async addCollaborator(
+    @Param('projectId') projectId: string,
+    @Param('userId') userId: string,
+    @Body() createCollaboratorDto: CreateCollaboratorDto    
+  ) {
+    return this.projectsService.addCollaborator(projectId, userId, createCollaboratorDto);    
+  }
+
+
 }

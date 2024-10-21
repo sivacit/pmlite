@@ -52,7 +52,7 @@ model Account {
 
 model Collaborator {
   id               String    @id @default(cuid())
-  roleName         String    @map("role_name")
+  roleName         Role      @default(EDITOR) @map("role_name")
   resourceType     String    @map("resource_type")
   resourceId       String    @map("resource_id")
   userId           String    @map("user_id")
@@ -91,4 +91,10 @@ model Task {
   userId    String?
   user      User?      @relation(fields: [userId], references: [id]) 
   @@map("task")
+}
+
+enum Role {
+  EDITOR
+  ADMIN
+  VIEWER
 }

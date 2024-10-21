@@ -6,6 +6,8 @@ import { AddTaskDto } from './dto/ add-task.dto';
 import { Task } from './entities/task.entity';
 import * as Papa from 'papaparse';
 import { generateTaskId } from 'src/utils/id-generator';
+import { Role } from './dto/collaborator.dto';
+import { CreateCollaboratorDto } from './dto/collaborator.dto';
 
 @Injectable()
 export class ProjectsService {
@@ -162,6 +164,18 @@ export class ProjectsService {
     return this.prisma.task.update({
       where: { id: taskId },
       data: { userId },
+    });
+  }
+
+  async addCollaborator(projectId: string, userId: string, createCollaboratorDto: CreateCollaboratorDto) {
+    return this.prisma.collaborator.create({
+      data: {
+        roleName: createCollaboratorDto.roleName ?? Role.EDITOR,
+        resourceType: createCollaboratorDto.resourceType,
+        resourceId: createCollaboratorDto.resourceId,
+        userId,
+        createdBy: createCollaboratorDto.createdBy,
+      },
     });
   }
 }
