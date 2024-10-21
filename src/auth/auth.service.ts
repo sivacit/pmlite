@@ -38,6 +38,6 @@ export class AuthService {
     const payload = { userId: user.id, email: user.email };
     const accessToken = this.jwtService.sign(payload);
 
-    return { accessToken };
+    return { accessToken,  user: { id: user.id, email: user.email, name: user.name } };
   }
 }

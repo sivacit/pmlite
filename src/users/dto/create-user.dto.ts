@@ -23,6 +23,8 @@ export class CreateUserDto {
   @ApiProperty()
   password: string;
 
+  salt: string;
+
   @IsOptional()
   @IsString()
   @ApiProperty()
