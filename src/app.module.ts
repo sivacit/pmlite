@@ -6,6 +6,6 @@ import { UsersModule } from './users/users.module';
 import { ProjectsModule } from './projects/projects.module';
 
 @Module({
-  imports: [PrismaModule, AuthModule, UsersModule, ProjectsModule],
+  imports: [PrismaModule, UsersModule, ProjectsModule, AuthModule],
 })
 export class AppModule {}

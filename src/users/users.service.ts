@@ -6,23 +6,23 @@ import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prismaService: PrismaService) {}
 
   // Create a new user
   async create(createUserDto: CreateUserDto) {
-    return this.prisma.user.create({
+    return this.prismaService.user.create({
       data: createUserDto,
     });
   }
 
   // Get all users
   async findAll() {
-    return this.prisma.user.findMany();
+    return this.prismaService.user.findMany();
   }
 
   // Get a specific user by ID
   async findOne(id: string) {
-    const user = await this.prisma.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: { id },
     });
 
@@ -33,9 +33,16 @@ export class UsersService {
     return user;
   }
 
+  async getUserByEmail(email: string) {
+    return await this.prismaService.user.findUnique({
+      where: { email: email.toLowerCase(), deletedTime: null },
+      include: { accounts: true },
+    });
+  }
+
   // Update a user
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const existingUser = await this.prisma.user.findUnique({
+    const existingUser = await this.prismaService.user.findUnique({
       where: { id },
     });
 
@@ -43,7 +50,7 @@ export class UsersService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
 
-    return this.prisma.user.update({
+    return this.prismaService.user.update({
       where: { id },
       data: updateUserDto,
     });
@@ -51,7 +58,7 @@ export class UsersService {
 
   // Remove a user
   async remove(id: string) {
-    const existingUser = await this.prisma.user.findUnique({
+    const existingUser = await this.prismaService.user.findUnique({
       where: { id },
     });
 
@@ -59,7 +66,7 @@ export class UsersService {
       throw new NotFoundException(`User with ID ${id} not found`);
     }
 
-    return this.prisma.user.delete({
+    return this.prismaService.user.delete({
       where: { id },
     });
   }

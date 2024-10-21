@@ -31,8 +31,23 @@ model User {
   lastModifiedTime DateTime?      @updatedAt @map("last_modified_time")
   collaborators    Collaborator[]
   Task             Task[]
+  accounts         Account[]
 
   @@map("users")
+}
+
+model Account {
+  id               String    @id @default(cuid())
+  userId           String    @map("user_id")
+  type             String
+  provider         String
+  providerId       String    @map("provider_id")
+  createdTime      DateTime  @default(now()) @map("created_time")
+
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerId])
+  @@map("account")
 }
 
 model Collaborator {

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Prisma } from '../../prisma';
+import type { Prisma } from '@prisma/client';
 import { AbstractSeed } from '../seed.abstract';
 import bcrypt from 'bcrypt';
 

@@ -1,15 +1,50 @@
-// src/users/dto/create-user.dto.ts
+import { IsEmail, IsOptional, IsString, IsBoolean, MinLength, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
+
+export class CreateAccountDto {
+  @IsString()
+  type: string;
+
+  @IsString()
+  provider: string;
+
+  @IsString()
+  providerId: string;
+}
+
 export class CreateUserDto {
-    name: string;
-    password?: string;
-    salt?: string;
-    phone?: string;
-    email: string;
-    avatar?: string;
-    isSystem?: boolean;
-    isAdmin?: boolean;
-    notifyMeta?: string;
-    lastSignTime?: Date;
-    deactivatedTime?: Date;
-  }
-  
+  @IsString()
+  @ApiProperty()
+  name: string;
+
+  @IsString()
+  @MinLength(6)  // Enforce a minimum password length
+  @ApiProperty()
+  password: string;
+
+  @IsOptional()
+  @IsString()
+  @ApiProperty()
+  phone?: string;
+
+  @IsEmail()  // Ensure the email is valid
+  @ApiProperty()
+  email: string;
+
+  @IsOptional()
+  @IsString()
+  avatar?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  isAdmin?: boolean;
+
+  @IsOptional()
+  @IsString()
+  notifyMeta?: string;
+
+  // @ValidateNested({ each: true }) // Ensure the account is valid
+  // @Type(() => CreateAccountDto)  // Required for class-transformer to work
+  // accounts: CreateAccountDto[];  // You can allow multiple accounts
+}
