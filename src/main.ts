@@ -9,7 +9,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('PM Lite API')
-    .setDescription('The CAT API description')
+    .setDescription('The PMLite API description')
     .setVersion('1.0')
     .addTag('Project Management')
     .addBearerAuth()
