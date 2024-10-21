@@ -1,4 +1,6 @@
 import { customAlphabet } from 'nanoid';
+import * as bcrypt from 'bcrypt';
+
 
 export enum IdPrefix {
   Space = 'spc',
@@ -179,3 +181,11 @@ export function generatePluginUserId() {
 export function generateDashboardId() {
   return IdPrefix.Dashboard + getRandomString(12);
 }
+
+export async function generatePassword(password: string) {
+  console.log("bycrypt password", password, bcrypt);
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);  
+  return { salt, password: hashPassword };
+};
+
