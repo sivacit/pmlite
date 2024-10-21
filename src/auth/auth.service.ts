@@ -1,4 +1,3 @@
-//src/auth/auth.service.ts
 import {
   Injectable,
   NotFoundException,
@@ -7,22 +6,28 @@ import {
 import { PrismaService } from './../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { AuthEntity } from './entity/auth.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(private prismaService: PrismaService, private jwtService: JwtService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private jwtService: JwtService
+  ) {}
 
   async login(email: string, password: string): Promise<AuthEntity> {
-    // Step 1: Fetch a user with the given email
-    const user = await this.prismaService.user.findUnique({ where: { email: email } });
+    // Step 1: Fetch the user with the given email
+    const user = await this.prismaService.user.findUnique({
+      where: { email },
+    });
 
     // If no user is found, throw an error
     if (!user) {
       throw new NotFoundException(`No user found for email: ${email}`);
     }
 
-    // Step 2: Check if the password is correct
-    const isPasswordValid = user.password === password;
+    // Step 2: Check if the password is correct using bcrypt
+    const isPasswordValid = await bcrypt.compare(password, user.password);
 
     // If password does not match, throw an error
     if (!isPasswordValid) {
@@ -30,8 +35,9 @@ export class AuthService {
     }
 
     // Step 3: Generate a JWT containing the user's ID and return it
-    return {
-      accessToken: this.jwtService.sign({ userId: user.id }),
-    };
+    const payload = { userId: user.id, email: user.email };
+    const accessToken = this.jwtService.sign(payload);
+
+    return { accessToken };
   }
 }

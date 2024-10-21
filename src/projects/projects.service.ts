@@ -3,6 +3,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateProjectDto } from './dto/create-project.dto';
 import { UpdateProjectDto } from './dto/update-project.dto';
 import { AddTaskDto } from './dto/ add-task.dto';
+import { Task } from './entities/task.entity';
+import * as Papa from 'papaparse';
+import { generateTaskId } from 'src/utils/id-generator';
 
 @Injectable()
 export class ProjectsService {
@@ -76,4 +79,69 @@ export class ProjectsService {
       where: { id: taskId },
     });
   }
+
+  // Parse CSV data into Task entities
+  async importTasksFromCsv(csvContent: string, projectId: string, userId: string): Promise<Task[]> {
+    return new Promise((resolve, reject) => {
+      Papa.parse(csvContent, {
+        header: true, // Parse CSV with headers
+        complete: (result) => {
+          const tasks: Task[] = result.data.map((row: any) => new Task({
+            id: generateTaskId(), // Generate a unique ID for each task
+            title: row?.title,
+            status: row?.status,
+            deadline: row?.deadline ? new Date(row.deadline) : undefined,
+            projectId: projectId,
+            userId: userId,
+          }));
+          resolve(tasks);
+        },
+        error: (error) => {
+          reject(error);
+        },
+      });
+    });
+  }
+
+  async saveTasksToDatabase(tasks: Task[]) {
+    for (const task of tasks) {
+      // Check if the project exists before inserting or updating the task
+      const projectExists = await this.prisma.project.findUnique({
+        where: { id: task.projectId },
+      });
+  
+      if (!projectExists) {
+        throw new Error(`Project with id ${task.projectId} does not exist.`);
+      }
+  
+      // Check if the user exists
+      const userExists = await this.prisma.user.findUnique({
+        where: { id: task.userId },
+      });
+  
+      if (!userExists) {
+        throw new Error(`User with id ${task.userId} does not exist.`);
+      }
+  
+      // Upsert the task
+      await this.prisma.task.upsert({
+        where: { id: task.projectId },
+        update: {
+          title: task.title,
+          status: task.status,
+          deadline: task.deadline,
+          projectId: task.projectId,
+          userId: task.userId,
+        },
+        create: {
+          id: task.id,
+          title: task.title,
+          status: task.status,
+          deadline: task.deadline,
+          projectId: task.projectId,
+          userId: task.userId,
+        },
+      });
+    }
+  }  
 }

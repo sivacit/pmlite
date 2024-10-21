@@ -1,16 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Prisma } from '@prisma/client';
 import { AbstractSeed } from '../seed.abstract';
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 
 export const CREATE_USER_NUM = 1;
 
 const generatePassword = async (password: string) => {
   console.log("bycrypt password", password, bcrypt);
-  // const salt = await bcrypt.genSalt(10);
-  const salt = "sdfds234234sdf";
-  // const hashPassword = await bcrypt.hash(password, salt);
-  const hashPassword = "sdfds234234sdf";
+  const salt = await bcrypt.genSalt(10);
+  const hashPassword = await bcrypt.hash(password, salt);  
   return { salt, password: hashPassword };
 };
 

@@ -128,3 +128,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+.DS_Store
+prisma/migrations/20241021051409_changeprojectdep/
+src/.DS_Store

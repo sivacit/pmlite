@@ -3,16 +3,14 @@ import { Global, Module } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
 import { PrismaModule } from '../prisma/prisma.module';
 import { ClsMiddleware, ClsModule } from 'nestjs-cls';
-import { CacheModule } from '../cache/cache.module';
-import { ConfigModule } from '../configs/config.module';
 import { DbProvider } from '../db-provider/db.provider';
 import { AuthGuard } from '../auth/guard/auth.guard';
 import { KnexModule } from './knex';
 
 const globalModules = {
   imports: [
-    ConfigModule.register(),    
-    CacheModule.register({ global: true }),
+    // ConfigModule.register(),    
+    // CacheModule.register({ global: true }),
     KnexModule.register(),
     PrismaModule,        
   ],

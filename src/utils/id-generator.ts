@@ -2,7 +2,7 @@ import { customAlphabet } from 'nanoid';
 
 export enum IdPrefix {
   Space = 'spc',
-  Base = 'bse',
+  Task = 'tsk',
 
   Table = 'tbl',
   Field = 'fld',
@@ -120,8 +120,8 @@ export function generateSpaceId() {
   return IdPrefix.Space + getRandomString(16);
 }
 
-export function generateBaseId() {
-  return IdPrefix.Base + getRandomString(16);
+export function generateTaskId() {
+  return IdPrefix.Task + getRandomString(16);
 }
 
 export function generateInvitationId() {

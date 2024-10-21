@@ -1,0 +1,4 @@
+title,status,deadline,usrTestUserId
+Task 1,open,2024-10-20T10:00:00Z,usrTestUserId
+Task 2,completed,2024-10-22T10:00:00Z,usrTestUserId_1
+Task 3,in_progress,2024-10-30T11:00:00Z,usrTestUserId_1
